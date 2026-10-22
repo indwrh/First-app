@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A/L Chemistry Master Hub</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            chemistry: {
+              inorganic: '#3b82f6',
+              kinetics: '#10b981',
+              organic: '#8b5cf6',
+              equilibrium: '#f59e0b',
+              solubility: '#eab308',
+              buffer: '#f43f5e',
+              ph: '#06b6d4',
+              electro: '#f97316',
+              industrial: '#14b8a6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark ::-webkit-scrollbar-thumb { background: #334155; }
+
+    /* Glassmorphism Backdrop */
+    .glass-nav {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    
+    /* Vibrant Glow Elements */
+    .glow-card {
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glow-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    /* Hide scrollbar for clean horizontal scrolls */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen font-sans flex flex-col transition-colors duration-200">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-50 glass-nav bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo / Title -->
+      <a href="#dashboard" onclick="navigate('dashboard')" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform bg-[#1E1B4B] flex items-center justify-center">
+          <img src="/drawable/img_app_icon_fg.jpg" alt="A/L Chemistry" class="w-full h-full object-cover">
+        </div>
+        <div>
+          <h1 class="text-lg font-extrabold tracking-tight font-display bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">A/L Chemistry</h1>
+          <span class="text-[10px] uppercase font-extrabold tracking-wider text-indigo-500 dark:text-indigo-400 block -mt-0.5">Master Hub</span>
+        </div>
+      </a>
+
+      <!-- Desktop Multi-Page Navigation Tabs -->
+      <nav class="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 text-xs font-semibold">
+        <button id="nav-dashboard" onclick="navigate('dashboard')" class="nav-tab px-4 py-2 rounded-xl transition-all">
+          🏠 Home
+        </button>
+        <button id="nav-topics" onclick="navigate('topics')" class="nav-tab px-4 py-2 rounded-xl transition-all">
+          🧪 Topics Hub
+        </button>
+        <button id="nav-resources" onclick="navigate('resources')" class="nav-tab px-4 py-2 rounded-xl transition-all">
+          📚 Resources
+        </button>
+        <button id="nav-tracker" onclick="navigate('tracker')" class="nav-tab px-4 py-2 rounded-xl transition-all">
+          📊 Tracker
+        </button>
+      </nav>
+
+      <!-- Global Search & Theme Toggle -->
+      <div class="flex items-center space-x-2">
+        <div class="relative hidden sm:block w-48 lg:w-64">
+          <input type="text" id="globalSearch" placeholder="Search lessons..." oninput="handleSearch(this.value)"
+            class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-100 dark:bg-slate-800 border border-transparent dark:border-slate-700/60 rounded-xl focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 transition-all">
+          <svg class="w-4 h-4 absolute left-3 top-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+
+        <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <svg id="sunIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg id="moonIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MOBILE NAVIGATION BAR (Bottom Fixed) ================= -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 glass-nav bg-white/90 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex justify-around items-center text-[10px] font-bold">
+    <button onclick="navigate('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center space-y-1 text-slate-500">
+      <span>🏠</span><span>Home</span>
+    </button>
+    <button onclick="navigate('topics')" id="mobile-nav-topics" class="flex flex-col items-center space-y-1 text-slate-500">
+      <span>🧪</span><span>Topics</span>
+    </button>
+    <button onclick="navigate('resources')" id="mobile-nav-resources" class="flex flex-col items-center space-y-1 text-slate-500">
+      <span>📚</span><span>Resources</span>
+    </button>
+    <button onclick="navigate('tracker')" id="mobile-nav-tracker" class="flex flex-col items-center space-y-1 text-slate-500">
+      <span>📊</span><span>Tracker</span>
+    </button>
+  </nav>
+
+  <!-- ================= MAIN CONTENT AREA (DYNAMIC PAGE SWITCHING) ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 mb-16 md:mb-6">
+
+    <!-- PAGE 1: DASHBOARD PAGE -->
+    <section id="page-dashboard" class="page-content space-y-8">
+      
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-slate-900 p-6 sm:p-10 text-white shadow-xl shadow-indigo-500/20">
+        <img src="/drawable/img_hero_chemistry.jpg" alt="Chemistry Lab" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-slate-950/90"></div>
+        <div class="relative z-10 max-w-2xl space-y-3">
+          <span class="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-extrabold uppercase tracking-wider">Sri Lanka A/L Syllabus</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold font-display leading-tight">Master Chemistry with Interactive Lessons</h2>
+          <p class="text-xs sm:text-sm text-indigo-100">Access video lectures, tutes, and study materials organized specifically for Sri Lankan A/L Chemistry students.</p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="navigate('topics')" class="px-5 py-2.5 rounded-xl bg-white text-indigo-700 font-bold text-xs shadow-md hover:bg-indigo-50 transition-all">Explore All Topics →</button>
+            <button onclick="navigate('resources')" class="px-5 py-2.5 rounded-xl bg-indigo-900/40 backdrop-blur-md border border-white/20 text-white font-bold text-xs hover:bg-indigo-900/60 transition-all">Download Tutes</button>
+          </div>
+        </div>
+        <!-- Decorative SVG Artwork -->
+        <svg class="absolute -right-10 -bottom-10 w-72 h-72 opacity-20 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+      </div>
+
+      <!-- Overview Stats Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-3">
+          <div class="p-3 bg-blue-500/10 text-blue-500 rounded-xl text-xl">🧪</div>
+          <div><p class="text-xs text-slate-400 font-medium">Topics</p><p class="text-lg font-bold">9 Units</p></div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-3">
+          <div class="p-3 bg-purple-500/10 text-purple-500 rounded-xl text-xl">🎥</div>
+          <div><p class="text-xs text-slate-400 font-medium">Lectures</p><p class="text-lg font-bold">100+ Videos</p></div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-3">
+          <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-xl text-xl">📂</div>
+          <div><p class="text-xs text-slate-400 font-medium">Tute Archive</p><p class="text-lg font-bold">Cloud Drive</p></div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-3">
+          <div class="p-3 bg-rose-500/10 text-rose-500 rounded-xl text-xl">📈</div>
+          <div><p class="text-xs text-slate-400 font-medium">Progress</p><p id="dashProgressText" class="text-lg font-bold">0% Done</p></div>
+        </div>
+      </div>
+
+      <!-- Chemistry Subjects Grid -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold font-display">Syllabus Breakdown</h3>
+          <button onclick="navigate('topics')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">View All →</button>
+        </div>
+        
+        <div id="dashboardCategoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Dynamically populated category cards -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PAGE 2: TOPICS LECTURE HUB -->
+    <section id="page-topics" class="page-content hidden space-y-6">
+      
+      <!-- Filter and Search Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div>
+          <h2 class="text-xl font-bold font-display">Video Lectures & Discussions</h2>
+          <p class="text-xs text-slate-400">Select a section or search to find specific lectures</p>
+        </div>
+        
+        <!-- Search -->
+        <div class="w-full md:w-72">
+          <input type="text" id="topicSearchInput" placeholder="Filter current page..." oninput="handleSearch(this.value)"
+            class="w-full px-4 py-2 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+      </div>
+
+      <!-- Filter Pills -->
+      <div id="topicsPillBar" class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+        <!-- Dynamic Category Pills -->
+      </div>
+
+      <!-- Main Render Container -->
+      <div id="topicsContentContainer" class="space-y-6">
+        <!-- Rendered Topic Sections -->
+      </div>
+
+    </section>
+
+    <!-- PAGE 3: RESOURCES HUB -->
+    <section id="page-resources" class="page-content hidden space-y-6">
+      <div class="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-3xl p-6 text-white shadow-lg">
+        <h2 class="text-2xl font-bold font-display mb-1">Study Material Archives</h2>
+        <p class="text-xs text-cyan-100">Download theory tutes, question sets, and recorded masterclasses.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Telegram Card -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-500 flex items-center justify-center text-2xl">
+              ✈️
+            </div>
+            <h3 class="font-bold text-lg">Telegram Channel</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Get updated tute links, lecture reminders, and community discussions.</p>
+          </div>
+          <a href="https://t.me/+OEQXQavLod43ZmJl" target="_blank" class="block text-center w-full py-2.5 rounded-xl bg-sky-500 text-white font-bold text-xs hover:bg-sky-600 transition-all">
+            Open Telegram
+          </a>
+        </div>
+
+        <!-- Google Drive Card -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-2xl">
+              📂
+            </div>
+            <h3 class="font-bold text-lg">Google Drive Folder</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Complete PDF archive containing theory tutes and structural revision papers.</p>
+          </div>
+          <a href="https://drive.google.com/drive/u/1/folders/14U9AHZA4xo-4Y8YVGyrpn07mNi_-_SKH" target="_blank" class="block text-center w-full py-2.5 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:bg-emerald-600 transition-all">
+            Access Drive
+          </a>
+        </div>
+
+        <!-- Masterclass Card -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-2xl">
+              🎓
+            </div>
+            <h3 class="font-bold text-lg">Charitha D. Recordings</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Direct link to Charitha Dissanayake's special recording series (Units 06 – 14).</p>
+          </div>
+          <a href="https://t.me/c/2942061365/809" target="_blank" class="block text-center w-full py-2.5 rounded-xl bg-purple-500 text-white font-bold text-xs hover:bg-purple-600 transition-all">
+            Watch Recordings
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PAGE 4: INTERACTIVE STUDY TRACKER -->
+    <section id="page-tracker" class="page-content hidden space-y-6">
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold font-display">Completion Progress</h2>
+            <p class="text-xs text-slate-400">Check off completed lessons to keep track of your exam preparation.</p>
+          </div>
+          <button onclick="resetTracker()" class="px-4 py-2 text-xs font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/40 rounded-xl border border-rose-200 dark:border-rose-900/50 hover:bg-rose-100 transition-all">
+            Reset Progress
+          </button>
+        </div>
+
+        <!-- Overall Progress Bar -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-bold">
+            <span id="trackerPercentLabel">0% Completed</span>
+            <span id="trackerCountLabel">0 / 0 Lessons</span>
+          </div>
+          <div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div id="trackerProgressBar" class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 w-0"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checklist Grid -->
+      <div id="trackerChecklistContainer" class="space-y-4">
+        <!-- Dynamic checklist sections -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-400">
+    <p>A/L Chemistry Dashboard — Designed for Mobile & Desktop</p>
+    <p class="text-[10px] mt-1 text-slate-500">Ready for GitHub Pages Deployment</p>
+  </footer>
+
+  <!-- ================= JAVASCRIPT APP LOGIC ================= -->
+  <script>
+    // Complete Dataset
+    const chemistryData = [
+      {
+        id: "inorganic",
+        title: "Inorganic Chemistry",
+        subTitle: "අකාබනික රසායනය",
+        color: "from-blue-500 to-indigo-600",
+        badge: "bg-blue-500/10 text-blue-600 border-blue-200 dark:border-blue-900/50",
+        items: [
+          { id: "inorg_1", name: "Inorganic Lesson 01", url: "https://youtu.be/3Y6VKZP2zAQ", platform: "youtube" },
+          { id: "inorg_2", name: "Inorganic Lesson 02", url: "https://youtu.be/lPOVYwc7pwQ", platform: "youtube" },
+          { id: "inorg_3", name: "Inorganic Lesson 03", url: "https://youtu.be/HhMEqhLwCdc", platform: "youtube" },
+          { id: "inorg_4", name: "Inorganic Lesson 04", url: "https://youtu.be/zclyf1kQAXk", platform: "youtube" },
+          { id: "inorg_5", name: "Inorganic Lesson 05", url: "https://youtu.be/kD1w4c5Oswc", platform: "youtube" },
+          { id: "inorg_6", name: "Inorganic Lesson 06", url: "https://youtu.be/jBeOmFsVppk", platform: "youtube" },
+          { id: "inorg_7", name: "Inorganic Lesson 07", url: "https://youtu.be/j9SnMSpPIc8", platform: "youtube" },
+          { id: "inorg_8", name: "Inorganic Lesson 08", url: "https://youtu.be/FRTNCA6q9ME", platform: "youtube" },
+          { id: "inorg_9", name: "Inorganic Lesson 09", url: "https://youtu.be/TdvYzVkHUO4", platform: "youtube" },
+          { id: "inorg_10", name: "Inorganic Lesson 10", url: "https://youtu.be/jIsbs2KfP5c", platform: "youtube" },
+          { id: "inorg_11", name: "Inorganic Lesson 11", url: "https://youtu.be/bjuaZ86RVzk", platform: "youtube" },
+          { id: "inorg_12", name: "Inorganic Lesson 12", url: "https://youtu.be/ZYkiiWqGYUI", platform: "youtube" },
+        ]
+      },
+      {
+        id: "kinetics",
+        title: "Chemical Kinetics",
+        subTitle: "රසායනික චාලක විද්‍යාව",
+        color: "from-emerald-500 to-teal-600",
+        badge: "bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:border-emerald-900/50",
+        items: [
+          { id: "kin_1", name: "Day 01 — Part 01", url: "https://rumble.com/v74ureo-kinetic-day-01-p01.html", platform: "rumble" },
+          { id: "kin_2", name: "Day 01 — Part 02", url: "https://rumble.com/v74urtm-chemical-kinetics-day-01-p02.html", platform: "rumble" },
+          { id: "kin_3", name: "Day 02 — Part 01", url: "https://rumble.com/v74urzc-chemical-kinetics-day-02-p01.html", platform: "rumble" },
+          { id: "kin_4", name: "Day 02 — Part 02", url: "https://rumble.com/v74us2i-chemical-kinetics-day-02-p02.html", platform: "rumble" },
+          { id: "kin_5", name: "Day 03 — Part 01", url: "https://rumble.com/v74us68-chemical-kinetics-day-03-p02.html", platform: "rumble" },
+          { id: "kin_6", name: "Day 03 — Part 02", url: "https://rumble.com/v74us68-chemical-kinetics-day-03-p02.html", platform: "rumble" },
+          { id: "kin_7", name: "Day 04 — Part 01", url: "https://rumble.com/v74ut3i-chemical-kinetics-day-04-p01.html", platform: "rumble" },
+          { id: "kin_8", name: "Day 04 — Part 02", url: "https://rumble.com/v74utv0-chemical-kinetics-day-04-p02.html", platform: "rumble" },
+          { id: "kin_9", name: "Day 05 — Part 01", url: "https://rumble.com/v74utzc-chemical-kinetics-day-05-p01.html", platform: "rumble" },
+          { id: "kin_10", name: "Day 05 — Part 02", url: "https://rumble.com/v74uu3c-chemical-kinetics-day-05-p02.html", platform: "rumble" },
+          { id: "kin_11", name: "Day 06 — Part 01", url: "https://rumble.com/v74lf9q-chemical-kinetics-06-p01.html", platform: "rumble" },
+          { id: "kin_12", name: "Day 06 — Part 02", url: "https://rumble.com/v74mf6i-chemical-kinetics-06-p02.html", platform: "rumble" },
+        ]
+      },
+      {
+        id: "organic",
+        title: "Organic Chemistry",
+        subTitle: "කාබනික රසායනය",
+        color: "from-purple-500 to-pink-600",
+        badge: "bg-purple-500/10 text-purple-600 border-purple-200 dark:border-purple-900/50",
+        items: [
+          { id: "org_1", name: "Organic Day 01 — Part 1", url: "https://rumble.com/v74uula-organic-day-01.html", platform: "rumble" },
+          { id: "org_2", name: "Organic Day 01 — Part 2", url: "https://rumble.com/v74uwwa-organic-day-01-p02.html", platform: "rumble" },
+          { id: "org_3", name: "Organic Day 02 — Part 1", url: "https://rumble.com/v74uypg-organic-day-02-p01.html", platform: "rumble" },
+          { id: "org_4", name: "Organic Day 02 — Part 2", url: "https://rumble.com/v74uz3y-organic-day-02-p02.html", platform: "rumble" },
+          { id: "org_5", name: "Organic Day 03 — Part 1", url: "https://rumble.com/v74v1s4-organic-day-03-p01.html", platform: "rumble" },
+          { id: "org_6", name: "Organic Day 03 — Part 2", url: "https://rumble.com/v74v2c0-organic-day-03-p02.html", platform: "rumble" },
+          { id: "org_7", name: "Organic Day 04 — Part 1", url: "https://rumble.com/v74v3ie-organic-day-04-p01.html", platform: "rumble" },
+          { id: "org_8", name: "Organic Day 04 — Part 2", url: "https://rumble.com/v74v3sq-organic-day-04-p02.html", platform: "rumble" },
+          { id: "org_9", name: "Organic Day 05 — Part 1", url: "https://rumble.com/v74mhhi-organic-day-05-p01.html", platform: "rumble" },
+          { id: "org_10", name: "Organic Day 05 — Part 2", url: "https://rumble.com/v74lly2-chemical-kinetics-day-06-p02.html", platform: "rumble" },
+          { id: "org_11", name: "Organic Day 06 — Part 1", url: "https://rumble.com/v74ztla-organic-day-06-p01.html", platform: "rumble" },
+          { id: "org_12", name: "Organic Day 06 — Part 2", url: "https://rumble.com/v74zu6k-organic-day-06-p02.html", platform: "rumble" },
+          { id: "org_13", name: "Organic Day 07 — Part 1", url: "https://rumble.com/v75d11w-organic-day-07-p01.html", platform: "rumble" },
+          { id: "org_14", name: "Organic Day 07 — Part 2", url: "https://rumble.com/v75d2x2-organic-day-07-p02.html", platform: "rumble" },
+          { id: "org_15", name: "Organic Day 08 — Part 1", url: "https://youtu.be/5qaY6Su7ITU?si=KKi7q1Qi4-Pe__-U", platform: "youtube" },
+          { id: "org_16", name: "Organic Day 08 — Part 2", url: "https://youtu.be/-9HC6V-asv4?si=1AhZozXJzewqjHYm", platform: "youtube" },
+          { id: "org_17", name: "Organic Day 09 — Part 1", url: "https://youtu.be/uXwUW78slFw", platform: "youtube" },
+          { id: "org_18", name: "Organic Day 09 — Part 2", url: "https://youtu.be/n7rpvp9ZSp4", platform: "youtube" },
+          { id: "org_19", name: "Organic Day 10", url: "https://youtu.be/hHQLJBGcjCc", platform: "youtube" },
+          { id: "org_20", name: "Organic Day 11", url: "https://youtu.be/INrsNJi9Ddw", platform: "youtube" },
+          { id: "org_21", name: "Organic Day 12", url: "https://youtu.be/ACB22wuFX4M", platform: "youtube" },
+          { id: "org_22", name: "Organic Day 13", url: "https://youtu.be/LfQQPbHaGwY", platform: "youtube" },
+          { id: "org_23", name: "Organic Day 14", url: "https://youtu.be/biuNbnnGWsQ", platform: "youtube" },
+          { id: "org_24", name: "Organic Day 15", url: "https://youtu.be/6r2GNeBr6JE", platform: "youtube" },
+          { id: "org_25", name: "Organic Day 16", url: "https://youtu.be/bbNmEWwNtCU", platform: "youtube" },
+          { id: "org_26", name: "Organic Day 17", url: "https://youtu.be/LFd6je0NNec", platform: "youtube" },
+          { id: "org_27", name: "Organic Day 18", url: "https://youtu.be/7avFu6yrPLM", platform: "youtube" },
+          { id: "org_28", name: "Organic Day 19", url: "https://youtu.be/9OewZoeLFVw", platform: "youtube" },
+          { id: "org_29", name: "Organic Day 20", url: "https://youtu.be/8Ea6jshluIE", platform: "youtube" },
+          { id: "org_30", name: "Organic Day 21", url: "https://youtu.be/rewPK6XGJws", platform: "youtube" },
+          { id: "org_31", name: "Organic Day 22", url: "https://youtu.be/4PAusH1yK5c", platform: "youtube" },
+          { id: "org_32", name: "Organic Day 23", url: "https://youtu.be/ggW3vS8Su4s", platform: "youtube" },
+          { id: "org_33", name: "Organic Day 24", url: "https://youtu.be/ggW3vS8Su4s", platform: "youtube" },
+          { id: "org_34", name: "Organic Day 25", url: "https://youtu.be/PZvkmIbDg4g", platform: "youtube" },
+          { id: "org_35", name: "Organic Day 26", url: "https://youtu.be/7ma73P0fXTc", platform: "youtube" },
+          { id: "org_36", name: "Organic Day 27", url: "https://youtu.be/Q0ueEbmADhw", platform: "youtube" },
+          { id: "org_37", name: "Organic Day 28", url: "https://youtu.be/Qccf-Oh-6G0", platform: "youtube" },
+          { id: "org_38", name: "Organic Day 29", url: "https://youtu.be/FFZJlYU06rs", platform: "youtube" },
+          { id: "org_39", name: "Organic Day 30", url: "https://youtu.be/1CQ92qbUzkQ", platform: "youtube" },
+        ]
+      },
+      {
+        id: "equilibrium",
+        title: "Equilibrium — Kp & Kc",
+        subTitle: "සමතුලිතතාවය",
+        color: "from-amber-500 to-orange-600",
+        badge: "bg-amber-500/10 text-amber-600 border-amber-200 dark:border-amber-900/50",
+        items: [
+          { id: "eq_1", name: "Day 01 — Part 1", url: "https://rumble.com/v74zrv8-equilibrium-day-01-p01.html", platform: "rumble" },
+          { id: "eq_2", name: "Day 01 — Part 2", url: "https://rumble.com/v74yggw-eequilibrium-01-p02.html", platform: "rumble" },
+          { id: "eq_3", name: "Day 02 — Part 1", url: "https://youtu.be/lb5qz88luz8?si=wT2UcEfTOWVPaQ4ll", platform: "youtube" },
+          { id: "eq_4", name: "Day 02 — Part 2", url: "https://youtu.be/Y6BSmxy45gs", platform: "youtube" },
+          { id: "eq_5", name: "Day 03", url: "https://youtu.be/c7ii6P7kdus?si=38k5KtqKR8k8yNXs", platform: "youtube" },
+          { id: "eq_6", name: "Day 04", url: "https://youtu.be/6BmevmWrQDU?si=RvnZdJmqGQswCdvJ", platform: "youtube" },
+          { id: "eq_7", name: "Day 05", url: "https://youtu.be/AlcZg8Sb78A", platform: "youtube" },
+          { id: "eq_8", name: "Day 06", url: "https://youtu.be/AlcZg8Sb78A", platform: "youtube" },
+          { id: "eq_9", name: "Day 07", url: "https://youtu.be/N51Gan12x3g", platform: "youtube" },
+          { id: "eq_10", name: "Day 08", url: "https://youtu.be/KZGeFPzKbhk", platform: "youtube" },
+        ]
+      },
+      {
+        id: "solubility",
+        title: "Solubility Product (Ksp)",
+        subTitle: "ද්‍රාව්‍යතා ගුණිතය",
+        color: "from-yellow-500 to-amber-600",
+        badge: "bg-yellow-500/10 text-yellow-600 border-yellow-200 dark:border-yellow-900/50",
+        items: [
+          { id: "sol_1", name: "Solubility Day 01", url: "https://youtu.be/DBPER9uVb9E", platform: "youtube" },
+          { id: "sol_2", name: "Solubility Day 02", url: "https://youtu.be/y-_E1wGuTHQ?si=Mwah1uFuVHfrHAXY", platform: "youtube" },
+          { id: "sol_3", name: "Solubility Day 03", url: "https://youtu.be/JeUXugb2pGI", platform: "youtube" },
+          { id: "sol_4", name: "Solubility Day 04", url: "https://youtu.be/AV7JgRM96JE", platform: "youtube" },
+          { id: "sol_5", name: "Solubility Day 05 (Live)", url: "https://www.youtube.com/live/WyZzvNSkqRc?si=gG_x_bMMiyFAghx4", platform: "youtube" },
+        ]
+      },
+      {
+        id: "buffer",
+        title: "Buffer & Region Equilibrium",
+        subTitle: "කලාප සමතුලිතතාවය",
+        color: "from-rose-500 to-red-600",
+        badge: "bg-rose-500/10 text-rose-600 border-rose-200 dark:border-rose-900/50",
+        items: [
+          { id: "buf_1", name: "Buffer Day 01", url: "https://youtu.be/W1_HQ-YLtYA?si=ymHFSuVBngPml3XW", platform: "youtube" },
+          { id: "buf_2", name: "Buffer Day 02", url: "https://youtu.be/lkisWtdBU5M", platform: "youtube" },
+          { id: "buf_3", name: "Buffer Day 03", url: "https://youtu.be/jxPuvRm1WD8", platform: "youtube" },
+          { id: "buf_4", name: "Buffer Day 04", url: "https://youtu.be/NPmQjrZnD0o", platform: "youtube" },
+          { id: "buf_5", name: "Buffer Day 05", url: "https://youtu.be/vhT9dfXw2Mc", platform: "youtube" },
+          { id: "buf_6", name: "Buffer Day 06", url: "https://youtu.be/wzbHqIFEG9k", platform: "youtube" },
+          { id: "buf_7", name: "Buffer Day 07", url: "https://youtu.be/0ZpjEtTTBes", platform: "youtube" },
+          { id: "buf_8", name: "Buffer Day 08", url: "https://youtu.be/loij6uiedh0", platform: "youtube" },
+        ]
+      },
+      {
+        id: "ph",
+        title: "pH & Aqueous Solutions",
+        subTitle: "pH අගය හා ජලීය ද්‍රාවණ",
+        color: "from-cyan-500 to-blue-600",
+        badge: "bg-cyan-500/10 text-cyan-600 border-cyan-200 dark:border-cyan-900/50",
+        items: [
+          { id: "ph_1", name: "pH Day 01", url: "https://youtu.be/5plY8aplLu0", platform: "youtube" },
+          { id: "ph_2", name: "pH Day 02", url: "https://youtu.be/XC4nPblkkSM", platform: "youtube" },
+          { id: "ph_3", name: "pH Day 03", url: "https://youtu.be/mmTfyJJvSos", platform: "youtube" },
+          { id: "ph_4", name: "pH Day 04", url: "https://youtu.be/BfmiYFO1P48", platform: "youtube" },
+          { id: "ph_5", name: "pH Day 05 — Part 1", url: "https://youtu.be/4eklUzW2SQY", platform: "youtube" },
+          { id: "ph_6", name: "pH Day 05 — Part 2", url: "https://youtu.be/QeQsyRYooZ8", platform: "youtube" },
+          { id: "ph_7", name: "pH Day 06", url: "https://youtu.be/slHJzA-bTi0?is=cgQvxrN1WW8mPY_i", platform: "youtube" },
+          { id: "ph_8", name: "pH Day 07", url: "https://youtu.be/LKXfj12OLdw", platform: "youtube" },
+          { id: "ph_9", name: "pH Day 08", url: "https://youtu.be/d8xuWny5iNM", platform: "youtube" },
+          { id: "ph_10", name: "pH Day 09", url: "https://youtu.be/hAPNSvF50kw", platform: "youtube" },
+        ]
+      },
+      {
+        id: "electrochem",
+        title: "Electrochemistry",
+        subTitle: "විද්‍යුත් රසායනය",
+        color: "from-orange-500 to-amber-600",
+        badge: "bg-orange-500/10 text-orange-600 border-orange-200 dark:border-orange-900/50",
+        items: [
+          { id: "el_1", name: "Electrochemistry Day 01", url: "https://youtu.be/DpChsSFOnnw", platform: "youtube" },
+          { id: "el_2", name: "Electrochemistry Day 02", url: "https://youtu.be/AUeEmx-Rqu4", platform: "youtube" },
+          { id: "el_3", name: "Electrochemistry Day 03", url: "https://youtu.be/PGEUaVpZaN8", platform: "youtube" },
+          { id: "el_4", name: "Electrochemistry Day 04", url: "https://youtu.be/kIgEyr8d97w", platform: "youtube" },
+          { id: "el_5", name: "Electrochemistry Day 05", url: "https://youtu.be/TaUj10co0MI", platform: "youtube" },
+          { id: "el_6", name: "Electrochemistry Day 06", url: "https://youtu.be/yhwKpKNthYM", platform: "youtube" },
+          { id: "el_7", name: "Electrochemistry Day 07", url: "https://www.youtube.com/watch?v=WyZzvNSkqRc", platform: "youtube" },
+        ]
+      },
+      {
+        id: "industrial",
+        title: "Industrial Chemistry",
+        subTitle: "කාර්මික රසායනය",
+        color: "from-teal-500 to-emerald-600",
+        badge: "bg-teal-500/10 text-teal-600 border-teal-200 dark:border-teal-900/50",
+        items: [
+          { id: "ind_1", name: "Magnesium Extraction (Mg)", url: "https://www.youtube.com/watch?v=NIH5MZ4rM0s", platform: "youtube" },
+          { id: "ind_2", name: "Titanium Dioxide Production (TiO₂)", url: "https://www.youtube.com/watch?v=lZawFPb9UHA", platform: "youtube" },
+          { id: "ind_3", name: "Sodium Hydroxide Production (NaOH)", url: "https://www.youtube.com/watch?v=Qglm_IAy-j0", platform: "youtube" },
+          { id: "ind_4", name: "Iron Production (යකඩ)", url: "https://www.youtube.com/watch?v=pvNsGvtjHpI", platform: "youtube" },
+          { id: "ind_5", name: "Soap Production (සබන්)", url: "https://www.youtube.com/watch?v=eZ79cEU8zSc", platform: "youtube" },
+          { id: "ind_6", name: "Polymer Production — Day 01", url: "https://www.youtube.com/watch?v=o3pSLd3TnTE", platform: "youtube" },
+          { id: "ind_7", name: "Polymer Production — Day 02", url: "https://www.youtube.com/watch?v=TYv18TdQ-QE", platform: "youtube" },
+          { id: "ind_8", name: "Ammonia Production (NH₃)", url: "https://www.youtube.com/watch?v=BuSKE2YdHwQ", platform: "youtube" },
+          { id: "ind_9", name: "Plant-based Products — Day 01", url: "https://www.youtube.com/watch?v=k9M9TqNbJHs", platform: "youtube" },
+          { id: "ind_10", name: "Plant-based Products — Day 02", url: "https://www.youtube.com/watch?v=4H3Z6BdNOl8", platform: "youtube" },
+          { id: "ind_11", name: "Nitric Acid Production (HNO₃)", url: "https://www.youtube.com/watch?v=yS8kHSNIkww", platform: "youtube" },
+          { id: "ind_12", name: "Sulfuric Acid Production (H₂SO₄)", url: "https://www.youtube.com/watch?v=geMS0F14A4Q", platform: "youtube" },
+          { id: "ind_13", name: "Industrial Questions — Day 01", url: "https://www.youtube.com/watch?v=YWbJiLtCss0", platform: "youtube" },
+          { id: "ind_14", name: "Industrial Questions — Day 02", url: "https://www.youtube.com/watch?v=HNVtbpXHCRk", platform: "youtube" },
+          { id: "ind_15", name: "Industrial Questions — Day 03", url: "https://www.youtube.com/watch?v=aV7k59P2Two", platform: "youtube" },
+          { id: "ind_16", name: "Industrial Discussion", url: "https://www.youtube.com/watch?v=6rMkRN1drgs", platform: "youtube" },
+        ]
+      }
+    ];
+
+    // State Variables
+    let activePage = 'dashboard';
+    let activeCategoryFilter = 'all';
+    let currentSearchQuery = '';
+    let completedLessons = JSON.parse(localStorage.getItem('al_chem_completed') || '{}');
+
+    // Page Navigation Router
+    function navigate(pageId) {
+      activePage = pageId;
+      
+      // Update Page visibility
+      document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`page-${pageId}`).classList.remove('hidden');
+
+      // Desktop Tab Styling
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.className = "nav-tab px-4 py-2 rounded-xl transition-all text-slate-600 dark:text-slate-300 hover:text-indigo-600";
+      });
+      const activeTab = document.getElementById(`nav-${pageId}`);
+      if (activeTab) {
+        activeTab.className = "nav-tab px-4 py-2 rounded-xl transition-all bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 font-bold shadow-sm";
+      }
+
+      // Mobile Bar Styling
+      ['dashboard', 'topics', 'resources', 'tracker'].forEach(p => {
+        const btn = document.getElementById(`mobile-nav-${p}`);
+        if (btn) btn.className = p === pageId ? "flex flex-col items-center space-y-1 text-indigo-600 dark:text-indigo-400" : "flex flex-col items-center space-y-1 text-slate-400";
+      });
+
+      // Page specific rendering
+      if (pageId === 'dashboard') renderDashboard();
+      if (pageId === 'topics') renderTopicsHub();
+      if (pageId === 'tracker') renderTracker();
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Render Dashboard
+    function renderDashboard() {
+      const grid = document.getElementById('dashboardCategoryGrid');
+      grid.innerHTML = chemistryData.map(cat => `
+        <div onclick="filterAndGoTopics('${cat.id}')" class="glow-card cursor-pointer p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${cat.color} flex items-center justify-center text-white text-lg font-bold shadow-md">
+              🧪
+            </div>
+            <span class="text-[10px] font-bold px-2 py-1 rounded-lg ${cat.badge}">${cat.items.length} Lessons</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-base font-display">${cat.title}</h4>
+            <p class="text-xs text-slate-400">${cat.subTitle}</p>
+          </div>
+          <div class="pt-2 flex justify-between items-center text-xs font-bold text-indigo-600 dark:text-indigo-400">
+            <span>Explore Lectures</span>
+            <span>→</span>
+          </div>
+        </div>
+      `).join('');
+
+      updateProgressStats();
+    }
+
+    function filterAndGoTopics(catId) {
+      activeCategoryFilter = catId;
+      navigate('topics');
+    }
+
+    // Render Topics Hub
+    function renderTopicsHub() {
+      // Render Category Pills
+      const pillBar = document.getElementById('topicsPillBar');
+      let pillsHTML = `
+        <button onclick="setTopicCategory('all')" class="px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition-all ${
+          activeCategoryFilter === 'all' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800'
+        }">All Topics</button>
+      `;
+
+      chemistryData.forEach(cat => {
+        pillsHTML += `
+          <button onclick="setTopicCategory('${cat.id}')" class="px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition-all ${
+            activeCategoryFilter === cat.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800'
+          }">${cat.title}</button>
+        `;
+      });
+      pillBar.innerHTML = pillsHTML;
+
+      // Render Cards
+      const container = document.getElementById('topicsContentContainer');
+      let html = '';
+
+      const filtered = chemistryData.filter(cat => activeCategoryFilter === 'all' || cat.id === activeCategoryFilter);
+
+      filtered.forEach(cat => {
+        const matchingItems = cat.items.filter(item => 
+          item.name.toLowerCase().includes(currentSearchQuery.toLowerCase()) ||
+          cat.title.toLowerCase().includes(currentSearchQuery.toLowerCase())
+        );
+
+        if (matchingItems.length > 0) {
+          html += `
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 space-y-4 shadow-sm">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div>
+                  <h3 class="font-bold text-lg font-display">${cat.title}</h3>
+                  <p class="text-xs text-slate-400">${cat.subTitle}</p>
+                </div>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-lg ${cat.badge}">${matchingItems.length} Lessons</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                ${matchingItems.map(item => {
+                  const isDone = completedLessons[item.id];
+                  return `
+                    <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2 group hover:border-indigo-500/50 transition-all">
+                      <a href="${item.url}" target="_blank" class="flex items-center space-x-3 min-w-0 flex-1">
+                        <div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0">
+                          ${item.platform === 'youtube' ? '🔴' : '🟢'}
+                        </div>
+                        <span class="text-xs font-semibold truncate ${isDone ? 'line-through text-slate-400' : ''}">${item.name}</span>
+                      </a>
+                      
+                      <button onclick="toggleLesson('${item.id}')" title="Mark as Complete" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-500 transition-colors">
+                        ${isDone ? '✅' : '⬜'}
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      if (!html) {
+        html = `<div class="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl"><p class="text-xs font-bold text-slate-400">No matching video lectures found.</p></div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function setTopicCategory(catId) {
+      activeCategoryFilter = catId;
+      renderTopicsHub();
+    }
+
+    // Toggle Lesson Completion
+    function toggleLesson(id) {
+      completedLessons[id] = !completedLessons[id];
+      localStorage.setItem('al_chem_completed', JSON.stringify(completedLessons));
+      
+      if (activePage === 'topics') renderTopicsHub();
+      if (activePage === 'tracker') renderTracker();
+      updateProgressStats();
+    }
+
+    // Render Study Progress Tracker
+    function renderTracker() {
+      const container = document.getElementById('trackerChecklistContainer');
+      let total = 0;
+      let completed = 0;
+
+      let html = chemistryData.map(cat => {
+        return `
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
+            <h3 class="font-bold text-sm font-display">${cat.title}</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              ${cat.items.map(item => {
+                total++;
+                const isDone = completedLessons[item.id];
+                if (isDone) completed++;
+                return `
+                  <label class="flex items-center space-x-2.5 p-2 rounded-xl bg-slate-50 dark:bg-slate-950 text-xs font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleLesson('${item.id}')" class="rounded text-indigo-600 focus:ring-indigo-500">
+                    <span class="${isDone ? 'line-through text-slate-400' : ''}">${item.name}</span>
+                  </label>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = html;
+
+      // Update Top Progress Bar inside tracker
+      const pct = total ? Math.round((completed / total) * 100) : 0;
+      document.getElementById('trackerPercentLabel').textContent = `${pct}% Completed`;
+      document.getElementById('trackerCountLabel').textContent = `${completed} / ${total} Lessons`;
+      document.getElementById('trackerProgressBar').style.width = `${pct}%`;
+    }
+
+    function resetTracker() {
+      if (confirm('Are you sure you want to reset your learning progress?')) {
+        completedLessons = {};
+        localStorage.removeItem('al_chem_completed');
+        renderTracker();
+        updateProgressStats();
+      }
+    }
+
+    function updateProgressStats() {
+      let total = 0;
+      let completed = 0;
+      chemistryData.forEach(cat => cat.items.forEach(item => {
+        total++;
+        if (completedLessons[item.id]) completed++;
+      }));
+      const pct = total ? Math.round((completed / total) * 100) : 0;
+      const el = document.getElementById('dashProgressText');
+      if (el) el.textContent = `${pct}% Done`;
+    }
+
+    // Global Search Handler
+    function handleSearch(val) {
+      currentSearchQuery = val;
+      if (activePage !== 'topics') {
+        navigate('topics');
+      } else {
+        renderTopicsHub();
+      }
+    }
+
+    // Theme Switcher Initialization
+    function initTheme() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('sunIcon').classList.remove('hidden');
+        document.getElementById('moonIcon').classList.add('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('sunIcon').classList.add('hidden');
+        document.getElementById('moonIcon').classList.remove('hidden');
+      }
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+        document.getElementById('sunIcon').classList.add('hidden');
+        document.getElementById('moonIcon').classList.remove('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+        document.getElementById('sunIcon').classList.remove('hidden');
+        document.getElementById('moonIcon').classList.add('hidden');
+      }
+    });
+
+    // App Startup
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderDashboard();
+    });
+  </script>
+</body>
+</html>

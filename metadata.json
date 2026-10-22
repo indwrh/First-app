@@ -1,0 +1,8 @@
+{
+  "name": "Chemistry Hub",
+  "description": "Sri Lanka A/L Chemistry syllabus master hub featuring interactive video lectures, comprehensive unit breakdowns, study resources, and progress tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

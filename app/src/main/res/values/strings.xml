@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Chemistry Hub</string>
+    <string name="title_dashboard">Home</string>
+    <string name="title_topics">Topics</string>
+    <string name="title_resources">Resources</string>
+    <string name="title_tracker">Tracker</string>
+    <string name="hero_badge">Sri Lanka A/L Syllabus</string>
+    <string name="hero_title">Master Chemistry with Interactive Lessons</string>
+    <string name="hero_desc">Access video lectures, tutes, and study materials organized specifically for Sri Lankan A/L Chemistry students.</string>
+    <string name="btn_explore_topics">Explore All Topics</string>
+    <string name="btn_download_tutes">Download Tutes</string>
+    <string name="stat_topics">9 Units</string>
+    <string name="stat_lectures">100+ Videos</string>
+    <string name="stat_tutes">Cloud Drive</string>
+    <string name="syllabus_breakdown">Syllabus Breakdown</string>
+    <string name="view_all">View All</string>
+    <string name="search_hint">Search lessons &amp; topics…</string>
+    <string name="reset_progress">Reset Progress</string>
+    <string name="reset_confirm">Are you sure you want to reset your study progress?</string>
+</resources>

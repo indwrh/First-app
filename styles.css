@@ -1,0 +1,52 @@
+/* ==========================================================================
+A/L Chemistry Master Hub - Modern Visual Styles
+========================================================================== */
+​/* Custom Animations */
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(6px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+​.page-content {
+animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+​/* Glassmorphism Backdrop Effects */
+.glass-nav {
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+}
+​/* Custom Interactive Hover Effects */
+.glow-card {
+transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+​.glow-card:hover {
+transform: translateY(-4px);
+}
+​/* Custom Scrollbars */
+::-webkit-scrollbar {
+width: 6px;
+height: 6px;
+}
+​::-webkit-scrollbar-track {
+background: transparent;
+}
+​::-webkit-scrollbar-thumb {
+background: #cbd5e1;
+border-radius: 9999px;
+}
+​.dark ::-webkit-scrollbar-thumb {
+background: #334155;
+}
+​/* Utility to hide scrollbars for clean horizontal sliding */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+​.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
